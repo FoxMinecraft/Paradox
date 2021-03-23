@@ -1,11 +1,11 @@
-package com.loohp.limbo.Server.Packets;
+package com.loohp.limbo.server.Packets;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 
 public class PacketPlayInHeldItemChange extends PacketIn {
 
-    private short slot;
+    private final short slot;
 
     public PacketPlayInHeldItemChange(short slot) {
         this.slot = slot;

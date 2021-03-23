@@ -1,12 +1,12 @@
-package com.loohp.limbo.Entity;
+package com.loohp.limbo.entity;
+
+import com.loohp.limbo.location.Location;
+import com.loohp.limbo.player.Player;
+import com.loohp.limbo.utils.NamespacedKey;
+import com.loohp.limbo.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import com.loohp.limbo.Location.Location;
-import com.loohp.limbo.Player.Player;
-import com.loohp.limbo.Utils.NamespacedKey;
-import com.loohp.limbo.World.World;
 
 public enum EntityType {
 
@@ -261,7 +261,6 @@ public enum EntityType {
     /**
      * A bolt of lightning.
      * <p>
-     * Spawn with {@link World#strikeLightning(Location)}.
      */
     //LIGHTNING("lightning_bolt", LightningStrike.class, -1, false),
     PLAYER("player", Player.class, 106, false),
@@ -308,11 +307,11 @@ public enum EntityType {
         */
     }
 
-    private EntityType(String name, Class<? extends Entity> clazz, int typeId) {
+    EntityType(String name, Class<? extends Entity> clazz, int typeId) {
         this(name, clazz, typeId, true);
     }
 
-    private EntityType(String name, Class<? extends Entity> clazz, int typeId, boolean independent) {
+    EntityType(String name, Class<? extends Entity> clazz, int typeId, boolean independent) {
         this.name = name;
         this.clazz = clazz;
         this.typeId = (short) typeId;
@@ -380,10 +379,7 @@ public enum EntityType {
     }
 
     /**
-     * Some entities cannot be spawned using {@link
-     * World#spawnEntity(Location, EntityType)} or {@link
-     * World#spawn(Location, Class)}, usually because they require additional
-     * information in order to spawn.
+     * Some entities cannot be spawned
      *
      * @return False if the entity type cannot be spawned
      */

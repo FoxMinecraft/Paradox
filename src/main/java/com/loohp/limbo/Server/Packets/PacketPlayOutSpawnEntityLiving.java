@@ -1,28 +1,28 @@
-package com.loohp.limbo.Server.Packets;
+package com.loohp.limbo.server.Packets;
+
+import com.loohp.limbo.entity.EntityType;
+import com.loohp.limbo.utils.DataTypeIO;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
-import com.loohp.limbo.Entity.EntityType;
-import com.loohp.limbo.Utils.DataTypeIO;
-
 public class PacketPlayOutSpawnEntityLiving extends PacketOut {
-	
-	private int entityId;
-    private UUID uuid;
-    private EntityType type;
-    private double x;
-    private double y;
-    private double z;
-    private float yaw;
-    private float pitch;
-    private float headPitch;
-    private short velocityX;
-    private short velocityY;
-    private short velocityZ;
-	
+
+	private final int entityId;
+	private final UUID uuid;
+	private final EntityType type;
+	private final double x;
+	private final double y;
+	private final double z;
+	private final float yaw;
+	private final float pitch;
+	private final float headPitch;
+	private final short velocityX;
+	private final short velocityY;
+	private final short velocityZ;
+
 	public PacketPlayOutSpawnEntityLiving(int entityId, UUID uuid, EntityType type, double x, double y, double z, float yaw, float pitch, float headPitch, short velocityX, short velocityY, short velocityZ) {
 		this.entityId = entityId;
 		this.uuid = uuid;
@@ -61,7 +61,7 @@ public class PacketPlayOutSpawnEntityLiving extends PacketOut {
 	public double getZ() {
 		return z;
 	}
-	
+
 	public float getYaw() {
 		return yaw;
 	}
@@ -89,7 +89,7 @@ public class PacketPlayOutSpawnEntityLiving extends PacketOut {
 	@Override
 	public byte[] serializePacket() throws IOException {
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-		
+
 		DataOutputStream output = new DataOutputStream(buffer);
 		output.writeByte(Packet.getPlayOut().get(getClass()));
 		DataTypeIO.writeVarInt(output, entityId);
@@ -101,10 +101,10 @@ public class PacketPlayOutSpawnEntityLiving extends PacketOut {
 		output.writeByte((byte) (int) (yaw * 256.0F / 360.0F));
 		output.writeByte((byte) (int) (pitch * 256.0F / 360.0F));
 		output.writeByte((byte) (int) (headPitch * 256.0F / 360.0F));
-		output.writeShort((int) (velocityX * 8000));
-		output.writeShort((int) (velocityY * 8000));
-		output.writeShort((int) (velocityZ * 8000));
-		
+		output.writeShort(velocityX * 8000);
+		output.writeShort(velocityY * 8000);
+		output.writeShort(velocityZ * 8000);
+
 		return buffer.toByteArray();
 	}
 

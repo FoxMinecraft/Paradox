@@ -1,9 +1,9 @@
-package com.loohp.limbo.Location;
+package com.loohp.limbo.location;
 
 import com.loohp.limbo.Limbo;
-import com.loohp.limbo.Utils.NumberConversions;
-import com.loohp.limbo.World.BlockState;
-import com.loohp.limbo.World.World;
+import com.loohp.limbo.utils.NumberConversions;
+import com.loohp.limbo.world.BlockState;
+import com.loohp.limbo.world.World;
 
 public class Location implements Cloneable {
 	
@@ -445,10 +445,7 @@ public class Location implements Cloneable {
         if (Float.floatToIntBits(this.pitch) != Float.floatToIntBits(other.pitch)) {
             return false;
         }
-        if (Float.floatToIntBits(this.yaw) != Float.floatToIntBits(other.yaw)) {
-            return false;
-        }
-        return true;
+        return Float.floatToIntBits(this.yaw) == Float.floatToIntBits(other.yaw);
     }
 
     @Override

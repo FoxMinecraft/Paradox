@@ -1,82 +1,64 @@
 package com.loohp.limbo;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.Ansi.Attribute;
-import org.jline.reader.Candidate;
-import org.jline.reader.Completer;
-import org.jline.reader.EndOfFileException;
-import org.jline.reader.LineReader;
-import org.jline.reader.LineReader.SuggestionType;
-import org.jline.reader.LineReaderBuilder;
-import org.jline.reader.ParsedLine;
-import org.jline.reader.UserInterruptException;
-import org.jline.terminal.Terminal;
-import org.jline.terminal.TerminalBuilder;
-
-import com.loohp.limbo.Commands.CommandSender;
-import com.loohp.limbo.GUI.ConsoleTextOutput;
-import com.loohp.limbo.Utils.CustomStringUtils;
-
+import com.loohp.limbo.commands.CommandSender;
+import com.loohp.limbo.gui.ConsoleTextOutput;
+import com.loohp.limbo.utils.CustomStringUtils;
 import jline.console.ConsoleReader;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.Ansi.Attribute;
+import org.jline.reader.*;
+import org.jline.reader.LineReader.SuggestionType;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
+
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class Console implements CommandSender {
-	
+
 	protected static final Map<ChatColor, String> REPLACEMENTS = new HashMap<>();
 	private final static String CONSOLE = "CONSOLE";
 	private final static String PROMPT = "> ";
 	protected final static String ERROR_RED = "\u001B[31;1m";
 	protected final static String RESET_COLOR = "\u001B[0m";
-	
-	private Terminal terminal;
-	private LineReader tabReader;
-	private ConsoleReader reader;
-	
-	private InputStream in;
+
+	private final Terminal terminal;
+	private final LineReader tabReader;
+	private final ConsoleReader reader;
+
+	private final InputStream in;
 	@SuppressWarnings("unused")
-	private PrintStream out;
+	private final PrintStream out;
 	@SuppressWarnings("unused")
-	private PrintStream err;
+	private final PrintStream err;
 	protected PrintStream logs;
-	
+
 	public Console(InputStream in, PrintStream out, PrintStream err) throws IOException {
 		String fileName = new SimpleDateFormat("yyyy'-'MM'-'dd'_'HH'-'mm'-'ss'_'zzz'.log'").format(new Date());
-        File dir = new File("logs");
-        dir.mkdirs();
-        File logs = new File(dir, fileName);
-        this.logs = new PrintStream(logs);
-        
-        if (in != null) {
-        	System.setIn(in);
-        	this.in = System.in;
-        } else {
-        	this.in = null;
-        }
+		File dir = new File("logs");
+		dir.mkdirs();
+		File logs = new File(dir, fileName);
+		this.logs = new PrintStream(logs);
+
+		if (in != null) {
+			System.setIn(in);
+			this.in = System.in;
+		} else {
+			this.in = null;
+		}
 		System.setOut(new ConsoleOutputStream(this, out == null ? new PrintStream(new OutputStream() {
 			@Override
-            public void write(int b) {
-                //DO NOTHING
-            }
-        }) : out, this.logs));
+			public void write(int b) {
+				//DO NOTHING
+			}
+		}) : out, this.logs));
 		this.out = System.out;
-		
+
 		System.setErr(new ConsoleErrorStream(this, err == null ? new PrintStream(new OutputStream() {
 			@Override
             public void write(int b) {
@@ -218,17 +200,17 @@ public class Console implements CommandSender {
 		str = str.replaceAll("(?i)" + ChatColor.COLOR_CHAR + "x(" + ChatColor.COLOR_CHAR + "[0-9a-f]){6}", "");
 		return str + RESET_COLOR;
 	}
-	
+
 	public static class ConsoleOutputStream extends PrintStream {
-		
-		private PrintStream logs;
-		private Console console;
-		
+
+		private final PrintStream logs;
+		private final Console console;
+
 		public ConsoleOutputStream(Console console, OutputStream out, PrintStream logs) {
-	        super(out);
-	        this.logs = logs;
-	        this.console = console;
-	    }
+			super(out);
+			this.logs = logs;
+			this.console = console;
+		}
 
 		@SuppressWarnings("resource")
 		@Override
@@ -354,17 +336,17 @@ public class Console implements CommandSender {
 	        console.unstashLine();
 	    }
 	}
-	
+
 	public static class ConsoleErrorStream extends PrintStream {
-		
-		private PrintStream logs;
-		private Console console;
-		
+
+		private final PrintStream logs;
+		private final Console console;
+
 		public ConsoleErrorStream(Console console, OutputStream out, PrintStream logs) {
-	        super(out);
-	        this.logs = logs;
-	        this.console = console;
-	    }
+			super(out);
+			this.logs = logs;
+			this.console = console;
+		}
 
 		@SuppressWarnings("resource")
 		@Override

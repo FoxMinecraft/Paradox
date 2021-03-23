@@ -1,41 +1,35 @@
-package com.loohp.limbo.World;
-
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+package com.loohp.limbo.world;
 
 import com.loohp.limbo.Limbo;
-import com.loohp.limbo.Entity.ArmorStand;
-import com.loohp.limbo.Entity.DataWatcher;
-import com.loohp.limbo.Entity.DataWatcher.WatchableObject;
-import com.loohp.limbo.Entity.Entity;
-import com.loohp.limbo.Entity.EntityType;
-import com.loohp.limbo.Location.Location;
-import com.loohp.limbo.Player.Player;
-import com.loohp.limbo.Server.Packets.PacketPlayOutEntityDestroy;
-import com.loohp.limbo.Server.Packets.PacketPlayOutEntityMetadata;
-import com.loohp.limbo.Utils.SchematicConvertionUtils;
-
+import com.loohp.limbo.entity.ArmorStand;
+import com.loohp.limbo.entity.DataWatcher;
+import com.loohp.limbo.entity.DataWatcher.WatchableObject;
+import com.loohp.limbo.entity.Entity;
+import com.loohp.limbo.entity.EntityType;
+import com.loohp.limbo.location.Location;
+import com.loohp.limbo.player.Player;
+import com.loohp.limbo.server.Packets.PacketPlayOutEntityDestroy;
+import com.loohp.limbo.server.Packets.PacketPlayOutEntityMetadata;
+import com.loohp.limbo.utils.SchematicConvertionUtils;
 import net.querz.mca.Chunk;
 import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.ListTag;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class World {
 
-	private String name;
-	private Environment environment;
-	private Chunk[][] chunks;
-	private int width;
-	private int length;
-	private LightEngineBlock lightEngineBlock;
+	private final String name;
+	private final Environment environment;
+	private final Chunk[][] chunks;
+	private final int width;
+	private final int length;
+	private final LightEngineBlock lightEngineBlock;
+	private final Map<Entity, DataWatcher> entities;
 	private LightEngineSky lightEngineSky;
-	private Map<Entity, DataWatcher> entities;
 
 	public World(String name, int width, int length, Environment environment) {
 		this.name = name;
@@ -51,7 +45,7 @@ public class World {
 				chunk.cleanupPalettesAndBlockStates();
 				CompoundTag heightMap = new CompoundTag();
 				heightMap.putLongArray("MOTION_BLOCKING",
-						new long[] {1371773531765642314L, 1389823183635651148L, 1371738278539598925L,
+						new long[]{1371773531765642314L, 1389823183635651148L, 1371738278539598925L,
 								1389823183635388492L, 1353688558756731469L, 1389823114781694027L, 1317765589597723213L,
 								1371773531899860042L, 1389823183635651149L, 1371773462911685197L, 1389823183635650636L,
 								1353688626805119565L, 1371773531900123211L, 1335639250618849869L, 1371738278674077258L,
@@ -66,23 +60,23 @@ public class World {
 				chunk.setTileEntities(new ListTag<CompoundTag>(CompoundTag.class));
 			}
 		}
-		
+
 		this.lightEngineBlock = new LightEngineBlock(this);
 		if (environment.hasSkyLight()) {
 			this.lightEngineSky = new LightEngineSky(this);
 		}
-		
+
 		this.entities = new LinkedHashMap<>();
 	}
 
 	public LightEngineBlock getLightEngineBlock() {
 		return lightEngineBlock;
 	}
-	
+
 	public LightEngineSky getLightEngineSky() {
 		return lightEngineSky;
 	}
-	
+
 	public boolean hasSkyLight() {
 		return lightEngineSky != null;
 	}
@@ -96,14 +90,14 @@ public class World {
 		CompoundTag block = SchematicConvertionUtils.toBlockTag(blockdata);
 		chunk.setBlockStateAt(x, y, z, block, false);
 	}
-	
+
 	public BlockState getBlock(int x, int y, int z) {
 		Chunk chunk = this.chunks[(x >> 4)][(z >> 4)];
 		if (chunk == null) {
 			chunk = Chunk.newChunk();
 			this.chunks[(x >> 4)][(z >> 4)] = chunk;
 		}
-		
+
 		CompoundTag tag = chunk.getBlockStateAt(x, y, z);
 		if (tag == null) {
 			tag = new CompoundTag();
@@ -111,7 +105,7 @@ public class World {
 		}
 		return new BlockState(tag);
 	}
-	
+
 	public void setBlock(int x, int y, int z, BlockState state) {
 		Chunk chunk = this.chunks[(x >> 4)][(z >> 4)];
 		if (chunk == null) {
@@ -128,14 +122,14 @@ public class World {
 	public Chunk getChunkAtWorldPos(int x, int z) {
 		return this.chunks[(x >> 4)][(z >> 4)];
 	}
-	
+
 	public Chunk getChunkAt(int x, int z) {
 		if (x < 0 || z < 0 || x >= chunks.length || z >= chunks[x].length) {
 			return null;
 		}
 		return this.chunks[x][z];
 	}
-	
+
 	public int getChunkX(Chunk chunk) {
 		for (int x = 0; x < chunks.length; x++) {
 			for (int z = 0; z < chunks[x].length; z++) {
@@ -147,7 +141,7 @@ public class World {
 		}
 		return Integer.MIN_VALUE;
 	}
-	
+
 	public int getChunkZ(Chunk chunk) {
 		for (int x = 0; x < chunks.length; x++) {
 			for (int z = 0; z < chunks[x].length; z++) {
@@ -159,13 +153,13 @@ public class World {
 		}
 		return Integer.MIN_VALUE;
 	}
-	
+
 	public int[] getChunkXZ(Chunk chunk) {
 		for (int x = 0; x < chunks.length; x++) {
 			for (int z = 0; z < chunks[x].length; z++) {
 				Chunk c = getChunkAt(x, z);
 				if (c.equals(chunk)) {
-					return new int[] {x, z};
+					return new int[]{x, z};
 				}
 			}
 		}
@@ -179,7 +173,7 @@ public class World {
 	public Environment getEnvironment() {
 		return environment;
 	}
-	
+
 	public int getWidth() {
 		return width;
 	}
@@ -187,7 +181,7 @@ public class World {
 	public int getLength() {
 		return length;
 	}
-	
+
 	public int getChunkWidth() {
 		return (width >> 4) + 1;
 	}
@@ -195,27 +189,27 @@ public class World {
 	public int getChunkLength() {
 		return (length >> 4) + 1;
 	}
-	
+
 	public Set<Entity> getEntities() {
 		return Collections.unmodifiableSet(entities.keySet());
 	}
-	
+
 	public Entity spawnEntity(EntityType type, Location location) {
 		if (!location.getWorld().equals(this)) {
 			throw new IllegalArgumentException("Location not in world.");
 		}
 		Entity entity;
 		switch (type) {
-		case ARMOR_STAND:
-			entity = new ArmorStand(location);
-			break;
-		default:
-			throw new UnsupportedOperationException("This EntityType cannot be summoned.");
+			case ARMOR_STAND:
+				entity = new ArmorStand(location);
+				break;
+			default:
+				throw new UnsupportedOperationException("This EntityType cannot be summoned.");
 		}
 		entities.put(entity, new DataWatcher(entity));
 		return entity;
 	}
-	
+
 	public Entity addEntity(Entity entity) {
 		if (entity.getWorld().equals(this)) {
 			entities.put(entity, new DataWatcher(entity));
@@ -224,11 +218,11 @@ public class World {
 		}
 		return entity;
 	}
-	
+
 	public List<Player> getPlayers() {
 		return Limbo.getInstance().getPlayers().stream().filter(each -> each.getWorld().equals(this)).collect(Collectors.toList());
 	}
-	
+
 	protected void removeEntity(Entity entity) {
 		entities.remove(entity);
 		PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(entity.getEntityId());
@@ -240,11 +234,11 @@ public class World {
 			}
 		}
 	}
-	
+
 	protected DataWatcher getDataWatcher(Entity entity) {
 		return entities.get(entity);
 	}
-	
+
 	public void update() throws IllegalArgumentException, IllegalAccessException {
 		for (DataWatcher watcher : entities.values()) {
 			if (watcher.getEntity().getWorld().equals(this)) {
@@ -300,12 +294,7 @@ public class World {
 			return false;
 		}
 		if (name == null) {
-			if (other.name != null) {
-				return false;
-			}
-		} else if (!name.equals(other.name)) {
-			return false;
-		}
-		return true;
+			return other.name == null;
+		} else return name.equals(other.name);
 	}
 }

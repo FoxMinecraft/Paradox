@@ -1,11 +1,11 @@
-package com.loohp.limbo.Location;
-
-import java.util.Random;
+package com.loohp.limbo.location;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Doubles;
-import com.loohp.limbo.Utils.NumberConversions;
-import com.loohp.limbo.World.World;
+import com.loohp.limbo.utils.NumberConversions;
+import com.loohp.limbo.world.World;
+
+import java.util.Random;
 
 /**
  * Represents a mutable vector. Because the components of Vectors are mutable,
@@ -15,7 +15,7 @@ import com.loohp.limbo.World.World;
  */
 public class Vector implements Cloneable {
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     /**
      * Threshold for fuzzy equals().

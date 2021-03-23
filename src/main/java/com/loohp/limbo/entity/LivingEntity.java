@@ -1,53 +1,53 @@
-package com.loohp.limbo.Entity;
+package com.loohp.limbo.entity;
+
+import com.loohp.limbo.Inventory.EquipmentSlot;
+import com.loohp.limbo.Limbo;
+import com.loohp.limbo.entity.DataWatcher.WatchableField;
+import com.loohp.limbo.entity.DataWatcher.WatchableObjectType;
+import com.loohp.limbo.location.Location;
+import com.loohp.limbo.world.BlockPosition;
+import com.loohp.limbo.world.World;
 
 import java.util.UUID;
 
-import com.loohp.limbo.Limbo;
-import com.loohp.limbo.Entity.DataWatcher.WatchableField;
-import com.loohp.limbo.Entity.DataWatcher.WatchableObjectType;
-import com.loohp.limbo.Inventory.EquipmentSlot;
-import com.loohp.limbo.Location.Location;
-import com.loohp.limbo.World.BlockPosition;
-import com.loohp.limbo.World.World;
-
 public abstract class LivingEntity extends Entity {
-	
-	@WatchableField(MetadataIndex = 7, WatchableObjectType = WatchableObjectType.BYTE, IsBitmask = true, Bitmask = 0x01) 
+
+	@WatchableField(MetadataIndex = 7, WatchableObjectType = WatchableObjectType.BYTE, IsBitmask = true, Bitmask = 0x01)
 	protected boolean handActive = false;
-	@WatchableField(MetadataIndex = 7, WatchableObjectType = WatchableObjectType.BYTE, IsBitmask = true, Bitmask = 0x02) 
+	@WatchableField(MetadataIndex = 7, WatchableObjectType = WatchableObjectType.BYTE, IsBitmask = true, Bitmask = 0x02)
 	protected boolean activeHand = false; //false = main hand, true = off hand
-	@WatchableField(MetadataIndex = 7, WatchableObjectType = WatchableObjectType.BYTE, IsBitmask = true, Bitmask = 0x04) 
+	@WatchableField(MetadataIndex = 7, WatchableObjectType = WatchableObjectType.BYTE, IsBitmask = true, Bitmask = 0x04)
 	protected boolean inRiptideSpinAttack = false;
-	@WatchableField(MetadataIndex = 8, WatchableObjectType = WatchableObjectType.FLOAT) 
+	@WatchableField(MetadataIndex = 8, WatchableObjectType = WatchableObjectType.FLOAT)
 	protected float health = 1.0F;
-	@WatchableField(MetadataIndex = 9, WatchableObjectType = WatchableObjectType.VARINT) 
+	@WatchableField(MetadataIndex = 9, WatchableObjectType = WatchableObjectType.VARINT)
 	protected int potionEffectColor = 0;
-	@WatchableField(MetadataIndex = 10, WatchableObjectType = WatchableObjectType.BOOLEAN) 
+	@WatchableField(MetadataIndex = 10, WatchableObjectType = WatchableObjectType.BOOLEAN)
 	protected boolean potionEffectAmbient = false;
-	@WatchableField(MetadataIndex = 11, WatchableObjectType = WatchableObjectType.VARINT) 
+	@WatchableField(MetadataIndex = 11, WatchableObjectType = WatchableObjectType.VARINT)
 	protected int arrowsInEntity = 0;
-	@WatchableField(MetadataIndex = 12, WatchableObjectType = WatchableObjectType.VARINT) 
+	@WatchableField(MetadataIndex = 12, WatchableObjectType = WatchableObjectType.VARINT)
 	protected int absorption = 0;
-	@WatchableField(MetadataIndex = 13, WatchableObjectType = WatchableObjectType.POSITION, IsOptional = true) 
+	@WatchableField(MetadataIndex = 13, WatchableObjectType = WatchableObjectType.POSITION, IsOptional = true)
 	protected BlockPosition sleepingLocation = null;
 
 	public LivingEntity(EntityType type, int entityId, UUID uuid, World world, double x, double y, double z, float yaw, float pitch) {
 		super(type, entityId, uuid, world, x, y, z, yaw, pitch);
 	}
-	
+
 	public LivingEntity(EntityType type, UUID uuid, World world, double x, double y, double z, float yaw, float pitch) {
 		this(type, Limbo.getInstance().getNextEntityId(), uuid, world, x, y, z, yaw, pitch);
 	}
-	
-	public LivingEntity(EntityType type, World world, double x, double y, double z, float yaw, float pitch) { 
+
+	public LivingEntity(EntityType type, World world, double x, double y, double z, float yaw, float pitch) {
 		this(type, Limbo.getInstance().getNextEntityId(), UUID.randomUUID(), world, x, y, z, yaw, pitch);
 	}
-	
-	public LivingEntity(EntityType type, UUID uuid, Location location) { 
+
+	public LivingEntity(EntityType type, UUID uuid, Location location) {
 		this(type, Limbo.getInstance().getNextEntityId(), uuid, location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 	}
-	
-	public LivingEntity(EntityType type, Location location) { 
+
+	public LivingEntity(EntityType type, Location location) {
 		this(type, Limbo.getInstance().getNextEntityId(), UUID.randomUUID(), location.getWorld(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 	}
 

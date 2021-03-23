@@ -1,15 +1,14 @@
-package com.loohp.limbo.Events.Status;
+package com.loohp.limbo.events.Status;
+
+import com.loohp.limbo.events.Event;
+import com.loohp.limbo.server.ClientConnection;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 import java.awt.image.BufferedImage;
 
-import com.loohp.limbo.Events.Event;
-import com.loohp.limbo.Server.ClientConnection;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-
 public class StatusPingEvent extends Event {
 
-	private ClientConnection connection;
+	private final ClientConnection connection;
 	private String version;
 	private int protocol;
 	private BaseComponent[] motd;
@@ -26,7 +25,7 @@ public class StatusPingEvent extends Event {
 		this.playersOnline = playersOnline;
 		this.favicon = favicon;
 	}
-	
+
 	public ClientConnection getConnection() {
 		return connection;
 	}

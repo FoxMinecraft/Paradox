@@ -1,35 +1,31 @@
-package com.loohp.limbo.Plugins;
+package com.loohp.limbo.plugins;
+
+import com.loohp.limbo.Limbo;
+import com.loohp.limbo.commands.CommandExecutor;
+import com.loohp.limbo.commands.CommandSender;
+import com.loohp.limbo.commands.TabCompletor;
+import com.loohp.limbo.file.FileConfiguration;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import com.loohp.limbo.Limbo;
-import com.loohp.limbo.Commands.CommandExecutor;
-import com.loohp.limbo.Commands.CommandSender;
-import com.loohp.limbo.Commands.TabCompletor;
-import com.loohp.limbo.File.FileConfiguration;
-
 public class PluginManager {
 
-	private Map<String, LimboPlugin> plugins;
-	private List<Executor> executors;
-	private File pluginFolder;
+	private final Map<String, LimboPlugin> plugins;
+	private final List<Executor> executors;
+	private final File pluginFolder;
 
 	public PluginManager(File pluginFolder) {
 		this.pluginFolder = pluginFolder;
 		this.executors = new ArrayList<>();
 		this.plugins = new LinkedHashMap<>();
 	}
-	
+
 	protected void loadPlugins() {
 		for (File file : pluginFolder.listFiles()) {
 			if (file.isFile() && file.getName().endsWith(".jar")) {

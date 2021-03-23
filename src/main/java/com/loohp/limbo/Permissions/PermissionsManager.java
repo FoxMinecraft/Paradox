@@ -1,4 +1,9 @@
-package com.loohp.limbo.Permissions;
+package com.loohp.limbo.permissions;
+
+import com.loohp.limbo.Console;
+import com.loohp.limbo.commands.CommandSender;
+import com.loohp.limbo.file.FileConfiguration;
+import com.loohp.limbo.player.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,21 +12,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.loohp.limbo.Console;
-import com.loohp.limbo.Commands.CommandSender;
-import com.loohp.limbo.File.FileConfiguration;
-import com.loohp.limbo.Player.Player;
-
 public class PermissionsManager {
-	
-	private Map<String, List<String>> users;
-	private Map<String, List<String>> permissions;
-	
+
+	private final Map<String, List<String>> users;
+	private final Map<String, List<String>> permissions;
+
 	public PermissionsManager() {
 		users = new HashMap<>();
 		permissions = new HashMap<>();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void loadDefaultPermissionFile(File file) throws IOException {
 		FileConfiguration config = new FileConfiguration(file);

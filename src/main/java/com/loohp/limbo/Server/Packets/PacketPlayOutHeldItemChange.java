@@ -1,4 +1,4 @@
-package com.loohp.limbo.Server.Packets;
+package com.loohp.limbo.server.Packets;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
