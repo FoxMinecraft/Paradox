@@ -1,4 +1,4 @@
-package com.loohp.limbo.server.Packets;
+package com.loohp.limbo.server.packets;
 
 import com.loohp.limbo.utils.DataTypeIO;
 import net.md_5.bungee.api.chat.BaseComponent;

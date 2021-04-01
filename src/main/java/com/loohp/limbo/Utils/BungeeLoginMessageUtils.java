@@ -3,7 +3,7 @@ package com.loohp.limbo.utils;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.loohp.limbo.server.Packets.PacketPlayOutPluginMessaging;
+import com.loohp.limbo.server.packets.PacketPlayOutPluginMessaging;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

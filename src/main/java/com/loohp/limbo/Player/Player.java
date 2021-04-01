@@ -11,7 +11,7 @@ import com.loohp.limbo.events.Player.PlayerChatEvent;
 import com.loohp.limbo.events.Player.PlayerTeleportEvent;
 import com.loohp.limbo.location.Location;
 import com.loohp.limbo.server.ClientConnection;
-import com.loohp.limbo.server.Packets.*;
+import com.loohp.limbo.server.packets.*;
 import com.loohp.limbo.utils.GameMode;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;

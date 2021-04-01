@@ -2,7 +2,7 @@ package com.loohp.limbo.utils;
 
 import com.loohp.limbo.Limbo;
 import com.loohp.limbo.commands.CommandSender;
-import com.loohp.limbo.server.Packets.PacketPlayOutDeclareCommands;
+import com.loohp.limbo.server.packets.PacketPlayOutDeclareCommands;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

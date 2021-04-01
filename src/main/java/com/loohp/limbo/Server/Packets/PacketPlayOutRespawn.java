@@ -1,4 +1,4 @@
-package com.loohp.limbo.server.Packets;
+package com.loohp.limbo.server.packets;
 
 import com.loohp.limbo.utils.DataTypeIO;
 import com.loohp.limbo.utils.GameMode;

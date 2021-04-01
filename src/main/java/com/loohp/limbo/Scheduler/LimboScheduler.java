@@ -1,32 +1,26 @@
-package com.loohp.limbo.Scheduler;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
+package com.loohp.limbo.scheduler;
 
 import com.loohp.limbo.Limbo;
-import com.loohp.limbo.Plugins.LimboPlugin;
+import com.loohp.limbo.plugins.LimboPlugin;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LimboScheduler {
-	
-	private AtomicInteger idProvider = new AtomicInteger(0);
-	private Map<Long, List<LimboSchedulerTask>> registeredTasks = new HashMap<>();
-	private Map<Integer, LimboSchedulerTask> tasksById = new HashMap<>();
-	private Set<Integer> cancelledTasks = new HashSet<>();
-	
+
+	private final AtomicInteger idProvider = new AtomicInteger(0);
+	private final Map<Long, List<LimboSchedulerTask>> registeredTasks = new HashMap<>();
+	private final Map<Integer, LimboSchedulerTask> tasksById = new HashMap<>();
+	private final Set<Integer> cancelledTasks = new HashSet<>();
+
 	public LimboScheduler() {
-		
+
 	}
-	
+
 	protected int nextId() {
 		return idProvider.getAndUpdate(id -> id >= Integer.MAX_VALUE ? 0 : id + 1);
 	}
-	
+
 	public void cancelTask(int taskId) {
 		if (tasksById.containsKey(taskId)) {
 			cancelledTasks.add(taskId);
@@ -170,21 +164,30 @@ public class LimboScheduler {
 				asyncTasks.add(task);
 				runTaskTimerAsync(task.getTaskId(), task.getPlugin(), task.getTask(), task.getPeriod(), task.getPeriod());
 				break;
-			case TIMER_SYNC:
-				syncedTasks.add(task);
-				runTaskTimer(task.getTaskId(), task.getPlugin(), task.getTask(), task.getPeriod(), task.getPeriod());
-				break;
+				case TIMER_SYNC:
+					syncedTasks.add(task);
+					runTaskTimer(task.getTaskId(), task.getPlugin(), task.getTask(), task.getPeriod(), task.getPeriod());
+					break;
 			}
 		}
-		
+
 		return new CurrentSchedulerTask(syncedTasks, asyncTasks);
 	}
-	
+
+	public enum LimboSchedulerTaskType {
+
+		SYNC,
+		ASYNC,
+		TIMER_SYNC,
+		TIMER_ASYNC
+
+	}
+
 	public static class CurrentSchedulerTask {
-		
-		private List<LimboSchedulerTask> asyncTasks;
-		private List<LimboSchedulerTask> syncedTasks;
-		
+
+		private final List<LimboSchedulerTask> asyncTasks;
+		private final List<LimboSchedulerTask> syncedTasks;
+
 		public CurrentSchedulerTask(List<LimboSchedulerTask> syncedTasks, List<LimboSchedulerTask> asyncTasks) {
 			this.asyncTasks = asyncTasks;
 			this.syncedTasks = syncedTasks;
@@ -197,17 +200,17 @@ public class LimboScheduler {
 		public List<LimboSchedulerTask> getSyncedTasks() {
 			return syncedTasks;
 		}
-		
+
 	}
-	
+
 	public static class LimboSchedulerTask {
-		
-		private int taskId;
-		private LimboPlugin plugin;
-		private LimboTask task;
-		private LimboSchedulerTaskType type;
-		private long period;
-		
+
+		private final int taskId;
+		private final LimboPlugin plugin;
+		private final LimboTask task;
+		private final LimboSchedulerTaskType type;
+		private final long period;
+
 		private LimboSchedulerTask(LimboPlugin plugin, LimboTask task, int taskId, LimboSchedulerTaskType type, long period) {
 			this.plugin = plugin;
 			this.task = task;
@@ -215,36 +218,27 @@ public class LimboScheduler {
 			this.type = type;
 			this.period = period;
 		}
-		
+
 		public LimboPlugin getPlugin() {
 			return plugin;
 		}
-		
+
 		public LimboTask getTask() {
 			return task;
 		}
-		
+
 		public int getTaskId() {
 			return taskId;
 		}
-		
+
 		public LimboSchedulerTaskType getType() {
 			return type;
 		}
-		
+
 		public long getPeriod() {
 			return period;
 		}
-		
-	}
-	
-	public static enum LimboSchedulerTaskType {
-		
-		SYNC,
-		ASYNC,
-		TIMER_SYNC,
-		TIMER_ASYNC;
-		
+
 	}
 
 }

@@ -1,6 +1,6 @@
-package com.loohp.limbo.server.Packets;
+package com.loohp.limbo.server.packets;
 
-import com.loohp.limbo.server.Packets.PacketPlayOutPlayerInfo.PlayerInfoData.PlayerInfoDataAddPlayer;
+import com.loohp.limbo.server.packets.PacketPlayOutPlayerInfo.PlayerInfoData.PlayerInfoDataAddPlayer;
 import com.loohp.limbo.utils.DataTypeIO;
 import com.loohp.limbo.utils.GameMode;
 

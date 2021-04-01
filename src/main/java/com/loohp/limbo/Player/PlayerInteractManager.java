@@ -3,7 +3,7 @@ package com.loohp.limbo.player;
 import com.loohp.limbo.Limbo;
 import com.loohp.limbo.entity.Entity;
 import com.loohp.limbo.location.Location;
-import com.loohp.limbo.server.Packets.*;
+import com.loohp.limbo.server.packets.*;
 import com.loohp.limbo.world.World;
 import net.querz.mca.Chunk;
 

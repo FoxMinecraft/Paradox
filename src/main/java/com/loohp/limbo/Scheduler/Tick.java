@@ -1,4 +1,8 @@
-package com.loohp.limbo.Scheduler;
+package com.loohp.limbo.scheduler;
+
+import com.loohp.limbo.Limbo;
+import com.loohp.limbo.scheduler.LimboScheduler.CurrentSchedulerTask;
+import com.loohp.limbo.scheduler.LimboScheduler.LimboSchedulerTask;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,24 +12,20 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.loohp.limbo.Limbo;
-import com.loohp.limbo.Scheduler.LimboScheduler.CurrentSchedulerTask;
-import com.loohp.limbo.Scheduler.LimboScheduler.LimboSchedulerTask;
-
 public class Tick {
-	
+
 	private int tickingInterval;
-	private AtomicLong tick = new AtomicLong(0);
-	
-	private List<Thread> threads = new ArrayList<>();
-	private Queue<LimboSchedulerTask> asyncTasksQueue = new ConcurrentLinkedQueue<>();
-	
+	private final AtomicLong tick = new AtomicLong(0);
+
+	private final List<Thread> threads = new ArrayList<>();
+	private final Queue<LimboSchedulerTask> asyncTasksQueue = new ConcurrentLinkedQueue<>();
+
 	public Tick(Limbo instance) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				tickingInterval = (int) Math.round(1000.0 / Limbo.getInstance().getServerProperties().getDefinedTicksPerSecond());
-				
+
 				for (int i = 0; i < 4; i++) {
 					Thread thread = new Thread(new Runnable() {
 						@Override

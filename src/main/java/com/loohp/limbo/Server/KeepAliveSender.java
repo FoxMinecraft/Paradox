@@ -2,7 +2,7 @@ package com.loohp.limbo.server;
 
 import com.loohp.limbo.Limbo;
 import com.loohp.limbo.server.ClientConnection.ClientState;
-import com.loohp.limbo.server.Packets.PacketPlayOutKeepAlive;
+import com.loohp.limbo.server.packets.PacketPlayOutKeepAlive;
 
 import java.io.IOException;
 import java.util.Random;

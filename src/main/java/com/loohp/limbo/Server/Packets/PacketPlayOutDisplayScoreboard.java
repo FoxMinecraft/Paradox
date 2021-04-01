@@ -1,5 +1,6 @@
 package com.loohp.limbo.server.packets;
 
+import com.loohp.limbo.plugins.scoreboard.Scoreboard;
 import com.loohp.limbo.utils.DataTypeIO;
 
 import java.io.ByteArrayOutputStream;
@@ -7,16 +8,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class PacketLoginOutDisconnect extends PacketOut {
+public class PacketPlayOutDisplayScoreboard extends PacketOut {
 
-    private final String jsonReason;
+    private final Scoreboard scoreboard;
 
-    public PacketLoginOutDisconnect(String jsonReason) {
-        this.jsonReason = jsonReason;
-    }
-
-    public String getJsonReason() {
-        return jsonReason;
+    public PacketPlayOutDisplayScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
     }
 
     @Override
@@ -24,10 +21,10 @@ public class PacketLoginOutDisconnect extends PacketOut {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
         DataOutputStream output = new DataOutputStream(buffer);
-        output.writeByte(Packet.getLoginOut().get(getClass()));
-        DataTypeIO.writeString(output, jsonReason, StandardCharsets.UTF_8);
+
+        output.writeByte(scoreboard.getPosition().getValue());
+        DataTypeIO.writeString(output, scoreboard.getName(), StandardCharsets.UTF_8);
 
         return buffer.toByteArray();
     }
-
 }
